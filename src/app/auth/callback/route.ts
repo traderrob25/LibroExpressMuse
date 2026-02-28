@@ -10,10 +10,11 @@ export async function GET(request: Request) {
         const { error, data } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
-            // Create session in 'sessions' table if it doesn't exist
+            console.log('--- AUTH SUCCESS, USER:', data.user?.email)
             const user = data.user
             if (user?.email) {
-                await supabase
+                console.log('--- UPSERTING SESSION FOR:', user.email)
+                const { error: upsertError } = await supabase
                     .from('sessions')
                     .upsert({
                         email: user.email,
@@ -22,6 +23,12 @@ export async function GET(request: Request) {
                         status: 'started',
                         updated_at: new Date().toISOString()
                     }, { onConflict: 'email' })
+
+                if (upsertError) {
+                    console.error('--- UPSERT ERROR:', upsertError)
+                } else {
+                    console.log('--- UPSERT SUCCESS')
+                }
             }
 
             return NextResponse.redirect(`${origin}/cuestionario`)

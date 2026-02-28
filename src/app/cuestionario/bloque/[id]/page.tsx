@@ -15,14 +15,33 @@ export default async function BloquePage(props: { params: Params }) {
 
     if (!user) redirect('/')
 
-    // Get session
-    const { data: session } = await supabase
+    // Get session id from email
+    let { data: session } = await supabase
         .from('sessions')
         .select('id')
         .eq('email', user.email)
         .single()
 
-    if (!session) redirect('/')
+    if (!session) {
+        // Auto-heal: Try to create the session if it's missing (failsafe)
+        const { data: newSession, error: upsertError } = await supabase
+            .from('sessions')
+            .upsert({
+                email: user.email,
+                nombre: user.user_metadata.nombre || 'Usuario',
+                empresa: user.user_metadata.empresa || '',
+                status: 'started',
+                updated_at: new Date().toISOString()
+            }, { onConflict: 'email' })
+            .select('id')
+            .single()
+
+        if (upsertError || !newSession) {
+            console.error('CRITICAL: Could not find or create session record:', upsertError)
+            return redirect('/')
+        }
+        session = newSession
+    }
 
     // Get existing responses for this block
     const { data: responses } = await supabase
