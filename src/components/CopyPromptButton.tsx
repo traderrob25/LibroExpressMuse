@@ -2,9 +2,15 @@
 
 import { useState } from 'react'
 
+interface ResponseData {
+    pregunta_numero: number
+    pregunta_texto: string
+    respuesta: string
+}
+
 interface CopyPromptButtonProps {
     sessionName: string
-    responses: any[]
+    responses: ResponseData[]
 }
 
 export default function CopyPromptButton({ sessionName, responses }: CopyPromptButtonProps) {
