@@ -35,7 +35,7 @@ export default async function PreviewPage() {
         return res && res.trim().split(/\s+/).length > 5
     }).length
 
-    const completionRate = Math.round((answeredCount / requiredQuestions) * 100)
+    const completionRate = Math.min(Math.round((answeredCount / requiredQuestions) * 100), 100)
     const canSubmit = completionRate >= 80
 
     const bloques = [
