@@ -3,6 +3,8 @@ import { questions } from '@/lib/questions'
 import BlockForm from '@/components/BlockForm'
 import { redirect } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
+
 type Params = Promise<{ id: string }>
 
 export default async function BloquePage(props: { params: Params }) {
