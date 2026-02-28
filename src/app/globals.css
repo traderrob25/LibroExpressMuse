@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+
+  --color-blue-50: #F5F9FF;
+  --color-blue-100: #EBF4FF;
+  --color-blue-200: #C1DDFF;
+  --color-blue-500: #4A90E2;
+  --color-blue-600: #357ABD;
+  --color-blue-700: #2A629A;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: white;
+}
